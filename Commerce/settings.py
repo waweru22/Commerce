@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'Signup',
     'rest_framework',
     'Products',
+    'Authentication'
 ]
 
 MIDDLEWARE = [
