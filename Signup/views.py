@@ -1,5 +1,6 @@
 from django.shortcuts import render
 
+from rest_framework.views import APIView
 from rest_framework import generics
 from .serializers import AppUserSerializer, VendorSerializer, CustomerSerializer
 
@@ -25,18 +26,23 @@ def getData(request):
 #         serializer.save()
 #     return Response(serializer.data)
 
-class Users(generics.ListCreateAPIView):
-    serializer_class = AppUserSerializer
+class Users(APIView):
     queryset = AppUser.objects.all()
-    def post(self, request, *args, **kwargs):
 
-        serializer = self.get_serializer(data=request.data)
-
+    # def get(self, request, format=None):
+    #     users = AppUser.objects.all()
+    #     serializer = AppUserSerializer(users, many=True)
+    #     return Response(serializer.data)
+    
+    def post(self, request):
+        serializer = AppUserSerializer(data=request.data)
         if serializer.is_valid(raise_exception = True):
             user = serializer.save()
-            print('from post request: ', user)
-            serialized_user = AppUserSerializer(user, context=self.get_serializer_context()).data
-            print('serialized user data: ', serialized_user)
-            return Response(serialized_user)
+            print(serializer.data)
+            print(user)
+            return Response(serializer.data)
+        
+# TODO: Create endpoints to display vendors and customers
+
         
        
