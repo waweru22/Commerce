@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
 from .managers import AppUserManager
+from phonenumber_field.modelfields import PhoneNumberField
 import uuid
 
 # Create your models here.
@@ -16,40 +17,28 @@ class AppUser(AbstractBaseUser, PermissionsMixin):
     date_joined = models.DateTimeField(auto_now_add=True)
     address = models.CharField(max_length=150)
     username = models.CharField(max_length=50, unique=True, default=uuid.uuid1)
+    phone_no = PhoneNumberField()
 
     # is_admin = models.BooleanField(default=False)
     # is_customer = models.BooleanField(default=False)
     # is_vendor = models.BooleanField(default=False)
-    # type = models.CharField(max_length=10, choices=Types.choices, default=Types.CUSTOMER)
-    # phone_number = models.
 
     objects = AppUserManager()
 
     USERNAME_FIELD = 'username'
     REQUIRED_FIELDS = ['email']
-
-    # def save(self, *args, **kwargs):
-    #     if not self.type or self.type == None:
-    #         self.type = AppUser.Types.CUSTOMER
-    #     return super().save(*args, **kwargs)
-
-    
     
 
 class Vendor(models.Model):
     # id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    # user = models.ForeignKey(AppUser, on_delete=models.CASCADE, related_name="vendor")
-    email = models.EmailField()
-    username = models.CharField(max_length=50, unique=True, default=uuid.uuid1)
-    date_joined = models.DateTimeField(auto_now_add=True)
-    address = models.CharField(max_length=150)
+    user = models.ForeignKey(AppUser, on_delete=models.CASCADE, related_name="vendor", editable=False)
     business_name = models.CharField(max_length=100)
     overview = models.TextField()
     contact_firstname = models.CharField(max_length=30)
     contact_lastname = models.CharField(max_length=30)
     bank_name = models.CharField(max_length=100)
     beneficiary_name = models.CharField(max_length=100)
-    account_number = models.CharField(max_length=9)
+    account_number = models.CharField(max_length=15)
 
     # user = models.OneToOneField(AppUser, on_delete=models.CASCADE)
 
@@ -59,14 +48,14 @@ class Vendor(models.Model):
 
 class Customer(models.Model):  
     # id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    user = models.ForeignKey(AppUser, on_delete=models.CASCADE, related_name="customer")
+    user = models.OneToOneField(AppUser, on_delete=models.CASCADE, related_name="customer", editable=False)
     firstname = models.CharField(max_length=30)
     lastname = models.CharField(max_length=30)
 
-    # user = models.OneToOneField(AppUser, on_delete=models.CASCADE)
-
     def __str__(self):
-        return f"{self.firstname}, {self.lastname}"
+        fn_upper = self.firstname.title()
+        ln_upper = self.lastname.title()
+        return f"{ln_upper}, {fn_upper}"
 
 
 

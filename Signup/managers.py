@@ -15,9 +15,7 @@ class AppUserManager(BaseUserManager):
         user.set_password(user.password)
         user.address = kwargs.get('address', '')
         user.user_type = kwargs.get('user_type', '')
-
-        # user.address = kwargs['address']
-        # user.user_type = kwargs['user_type']
+        
         # TODO: Add other fields to be stored to the db here
 
         # if user_type == "customer":
