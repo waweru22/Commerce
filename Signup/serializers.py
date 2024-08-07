@@ -5,23 +5,23 @@ from django.core.exceptions import ValidationError
 
 class AppUserSerializer(serializers.ModelSerializer):
     user_type = serializers.CharField(required=False)
-    email = serializers.EmailField(write_only=True, required=False)
-    date_joined = serializers.DateTimeField(write_only=True, required=False)
-    address = serializers.CharField(write_only=True, required=False)
-    username = serializers.CharField(write_only=True, required=False)
-    phone_no = serializers.CharField(write_only=True, required=False)
+    email = serializers.EmailField(required=False)
+    date_joined = serializers.DateTimeField(required=False)
+    address = serializers.CharField(required=False)
+    username = serializers.CharField(required=False)
+    phone_no = serializers.CharField(required=False)
 
     #VENDOR 
-    business_name = serializers.CharField(write_only=True, required=False)
-    contact_firstname = serializers.CharField(write_only=True, required=False)
-    contact_lastname = serializers.CharField(write_only=True, required=False)
-    bank_name = serializers.CharField(write_only=True, required=False)
-    beneficiary_name = serializers.CharField(write_only=True, required=False)
-    account_number = serializers.CharField(write_only=True, required=False)
+    business_name = serializers.CharField(required=False)
+    contact_firstname = serializers.CharField(required=False)
+    contact_lastname = serializers.CharField(required=False)
+    bank_name = serializers.CharField(required=False)
+    beneficiary_name = serializers.CharField(required=False)
+    account_number = serializers.CharField(required=False)
 
     #CUSTOMER
-    firstname = serializers.CharField(write_only=True, required=False)
-    lastname = serializers.CharField(write_only=True, required=False)
+    firstname = serializers.CharField(required=False)
+    lastname = serializers.CharField(required=False)
     
     class Meta:
         model = AppUser
@@ -48,8 +48,8 @@ class AppUserSerializer(serializers.ModelSerializer):
                 print('vendor info: ', vendor_info)
                 # new_user = vendor_info.update(user)
                 # print(new_user)
-                print(type(vendor_info))
-                print(type(user))
+                # print(type(vendor_info))
+                # print(type(user))
 
             elif user_data['user_type'] == "customer":
                 keys = ['firstname', 'lastname']
