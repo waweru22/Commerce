@@ -4,7 +4,7 @@ from django.core.exceptions import ValidationError
 
 
 class AppUserSerializer(serializers.ModelSerializer):
-    user_type = serializers.CharField(write_only=True, required=False)
+    user_type = serializers.CharField(required=False)
     email = serializers.EmailField(write_only=True, required=False)
     date_joined = serializers.DateTimeField(write_only=True, required=False)
     address = serializers.CharField(write_only=True, required=False)
@@ -45,14 +45,21 @@ class AppUserSerializer(serializers.ModelSerializer):
                 vendor_info = { x:user_data[x] for x in keys }
                 vendor = Vendor.objects.create(user=user, **vendor_info )
                 vendor.save() 
+                print('vendor info: ', vendor_info)
+                # new_user = vendor_info.update(user)
+                # print(new_user)
+                print(type(vendor_info))
+                print(type(user))
 
             elif user_data['user_type'] == "customer":
                 keys = ['firstname', 'lastname']
                 customer_info = { x:user_data[x] for x in keys }
                 customer = Customer.objects.create(user=user, **customer_info )
                 customer.save()
+                print('customer info: ', customer_info)
             else:
                 raise ValidationError("User must either be a 'customer' or 'vendor' ")
+            # print(user)
             return user
     
 
