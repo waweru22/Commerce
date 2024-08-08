@@ -4,14 +4,12 @@ from rest_framework.views import APIView
 from rest_framework import generics
 from .serializers import AppUserSerializer, VendorSerializer, CustomerSerializer
 
-# Create your views here.
-
-#Create view for user details
-
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from Signup.models import AppUser
 from .serializers import AppUserSerializer
+
+from rest_framework.permissions import AllowAny
 
 @api_view(['GET'])
 def getData(request):
@@ -27,6 +25,7 @@ def getData(request):
 #     return Response(serializer.data)
 
 class Users(APIView):
+    permission_classes = ( AllowAny, )
     queryset = AppUser.objects.all()
 
     # def get(self, request, format=None):

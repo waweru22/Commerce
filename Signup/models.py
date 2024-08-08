@@ -59,22 +59,21 @@ class Customer(models.Model):
 
 
 
-    
+
 # {
 #     "user_type": "vendor",
-#     "email": "xxx123@gmail.com",
-#     "date_joined": "2024-04-05",
+#     "email": "first@gmail.com",
 #     "address": "10, x street, lagos",
-#     "username": "vendorXV",
+#     "username": "First",
 #     "business_name": "business1",
 #     "contact_firstname": "contactfn1",
 #     "contact_lastname": "contactln1",
 #     "bank_name": "GTB",
 #     "beneficiary_name": "beneficiary1",
-#     "account_number": "097xxx12345",
-#     "firstname": "jana",
-#     "lastname": "doe",
-#     "password": "firsttest"
+#     "account_number": "09128722496",
+#     "firstname": "first",
+#     "lastname": "user",
+#     "password": "1111"
 # }
 
     
