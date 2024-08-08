@@ -10,6 +10,8 @@ from rest_framework.authentication import SessionAuthentication, TokenAuthentica
 
 class LoginView(APIView):
     permission_classes = ( AllowAny, )
+    authentication_classes = ( SessionAuthentication, TokenAuthentication, )
+
     def post(self, request, format=None):
 
         if request.user.is_authenticated:
@@ -21,6 +23,8 @@ class LoginView(APIView):
         serializer.is_valid(raise_exception=True)
         user = serializer.validated_data["user"]
         token, created = Token.objects.get_or_create(user=user)
+
+        print(request.user)
 
         return Response({"message": "Logged In Successfully", "token": token.key}, status=status.HTTP_200_OK)
 
