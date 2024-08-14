@@ -31,7 +31,8 @@ class AppUser(AbstractBaseUser, PermissionsMixin):
 
 class Vendor(models.Model):
     # id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    user = models.ForeignKey(AppUser, on_delete=models.CASCADE, related_name="vendor", editable=False)
+    user = models.OneToOneField(AppUser, on_delete=models.CASCADE, related_name="vendor")
+    
     business_name = models.CharField(max_length=100)
     overview = models.TextField()
     contact_firstname = models.CharField(max_length=30)
@@ -45,10 +46,12 @@ class Vendor(models.Model):
     def __str__(self):
         return self.business_name
 
+    def get_user(self):
+        return self.user
 
 class Customer(models.Model):  
     # id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    user = models.OneToOneField(AppUser, on_delete=models.CASCADE, related_name="customer", editable=False)
+    user = models.OneToOneField(AppUser, on_delete=models.CASCADE, related_name="customer")
     firstname = models.CharField(max_length=30)
     lastname = models.CharField(max_length=30)
 
@@ -56,6 +59,17 @@ class Customer(models.Model):
         fn_upper = self.firstname.title()
         ln_upper = self.lastname.title()
         return f"{ln_upper}, {fn_upper}"
+
+# {
+# "user_type": "customer",
+# "username": "customer1",
+# "email": "customer1@gmail.com",
+# "password": "1111",
+# "address": "No 9, Nunya Business Crescent",
+# "firstname": "Nunya",
+# "lastname": "Business"
+# }
+
 
 
 

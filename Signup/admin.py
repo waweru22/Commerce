@@ -37,7 +37,7 @@ class AppUserAdmin(UserAdmin):
 class VendorAdmin(admin.ModelAdmin):
     model = Vendor
 
-    list_display = ["business_name"]
+    list_display = ["id", "user", "business_name"]
     search_fields = ("business_name",)
     ordering = ("business_name",)
 

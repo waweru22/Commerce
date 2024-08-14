@@ -39,6 +39,8 @@ class Users(APIView):
             user = serializer.save()
             print(serializer.data)
             print(user)
+
+            
             return Response(serializer.data)
         
 # TODO: Create endpoints to display vendors and customers
