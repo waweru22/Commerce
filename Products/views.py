@@ -32,21 +32,13 @@ class ProductAPI(APIView):
 
         categories = data.pop('categories', '')
 
-        # print(data)
-
-        # print("--------------------------------------------------------------")
-
         data['vendor'] = Vendor.objects.get(id__exact=data['vendor'])
 
-        # print(data)
-
-
         try:
-            # try:
-            product = Product.objects.create(**data)
-            print(product)
-            # except Exception as e:
-            #     print(f"Here's the bitch {e} ----------------------------------------")
+            try:
+                product = Product.objects.create(**data)
+            except Exception as e:
+                return Response({"Message": "Error Encountered", "Error": "Product Creation Failed", "Exception": e}, status=status.HTTP_400_BAD_REQUEST)
 
             if product:
                 product.save()
@@ -57,13 +49,10 @@ class ProductAPI(APIView):
                     product.save()
                 
                 prodserializer = ProductSerializer(product)
-                return Response(prodserializer.data)
-                # if prodserializer.is_valid(raise_exception=True):
-                #     return Response({"message": "Successfully Created Prod", "product": prodserializer.data}, status=status.HTTP_200_OK)
-                return Response({"message": "Validation not successful"}, status=status.HTTP_400_BAD_REQUEST)
-
+                return Response({"message": "Successfully Created Prod", "product": prodserializer.data}, status=status.HTTP_200_OK)
+                
         except Exception as e:
-            return Response({"message": "Error Encountered", "error": e}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({"Message": "Error Encountered", "Error": e}, status=status.HTTP_400_BAD_REQUEST)
 
 
 
