@@ -5,11 +5,11 @@ from django.core.exceptions import ValidationError
 
 class AppUserSerializer(serializers.ModelSerializer):
     user_type = serializers.CharField(required=False)
-    email = serializers.EmailField(required=False)
+    email = serializers.EmailField(required=True)
     date_joined = serializers.DateTimeField(required=False)
     address = serializers.CharField(required=False)
     username = serializers.CharField(required=False)
-    phone_no = serializers.CharField(required=False)
+    # phone_no = serializers.CharField(required=True)
 
     #VENDOR 
     business_name = serializers.CharField(required=False)
@@ -29,8 +29,18 @@ class AppUserSerializer(serializers.ModelSerializer):
 
     def validate_username(self, value):
         if AppUser.objects.filter(username=value).exists():
-            raise ValidationError("Username already exists")
+            raise ValidationError("This username already exists")
         return value
+    
+    def validate_email(self, value):
+        if AppUser.objects.filter(email=value).exists():
+            raise ValidationError("This email already exists")
+        return value
+    
+    # def validate_phone_no(self, value):
+    #     if AppUser.objects.filter(phone_no=value).exists():
+    #         raise ValidationError("This phone number already exists")
+    #     return value
 
     def create(self, user_data): 
         vendor = VendorSerializer(read_only=True)
@@ -48,7 +58,7 @@ class AppUserSerializer(serializers.ModelSerializer):
                 print('vendor info: ', vendor_info)
                 # new_user = vendor_info.update(user)
                 # print(new_user)
-                # print(type(vendor_info))
+                # print(vendor_info)
                 # print(type(user))
 
             elif user_data['user_type'] == "customer":

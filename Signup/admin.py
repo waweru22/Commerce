@@ -4,6 +4,7 @@ from django.utils.translation import gettext_lazy as _
 from .models import AppUser, Vendor, Customer
 from django import forms
 from phonenumber_field.widgets import PhoneNumberPrefixWidget
+from phonenumber_field.formfields import PhoneNumberField
 
 # Register your models here.
 
@@ -33,9 +34,15 @@ class AppUserAdmin(UserAdmin):
     search_fields = ("email",)
     ordering = ("id",)
 
+# class PhoneForm(forms.ModelForm):
+#     widgets = {
+#         'phone_no': PhoneNumberPrefixWidget()
+#     }
+
 @admin.register(Vendor)
 class VendorAdmin(admin.ModelAdmin):
     model = Vendor
+    # form = PhoneForm
 
     list_display = ["business_name"]
     search_fields = ("business_name",)
