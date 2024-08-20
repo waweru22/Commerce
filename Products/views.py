@@ -54,8 +54,6 @@ class ProductAPI(APIView):
         except Exception as e:
             return Response({"Message": "Error Encountered", "Error": e}, status=status.HTTP_400_BAD_REQUEST)
 
-
-
 class CategoryAPI(APIView):
     permission_classes = ( IsAuthenticated, )
     authentication_classes = ( SessionAuthentication, TokenAuthentication, )
@@ -71,3 +69,19 @@ class CategoryAPI(APIView):
 
         except Exception as e:
             return Response({"message": "Error Encountered On Creating Categories", "Error": e}, status=status.HTTP_400_BAD_REQUEST)
+
+class ImageTest(APIView):
+    authentication_classes = ( SessionAuthentication, TokenAuthentication, )
+    permission_classes = ( IsAuthenticated, )
+
+    def get(self, request):
+        import cloudinary
+
+        cloudinary.config(
+            cloud_name = "dwaomuo1l",
+            secure = True
+        )
+
+        image_tag = cloudinary.CloudinaryImage("gcbqmwr1hbvprfohlabz").url
+        print(f"This is the image: {image_tag}")
+        return Response(image_tag, status=status.HTTP_200_OK)
