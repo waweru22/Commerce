@@ -33,7 +33,8 @@ class AppUser(AbstractBaseUser, PermissionsMixin):
 
 class Vendor(models.Model):
     # id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    user = models.ForeignKey(AppUser, on_delete=models.CASCADE, related_name="vendor", editable=False)
+    user = models.OneToOneField(AppUser, on_delete=models.CASCADE, related_name="vendor")
+    
     business_name = models.CharField(max_length=100)
     overview = models.TextField()
     contact_firstname = models.CharField(max_length=30)
@@ -47,10 +48,12 @@ class Vendor(models.Model):
     def __str__(self):
         return self.business_name
 
+    def get_user(self):
+        return self.user
 
 class Customer(models.Model):  
     # id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    user = models.OneToOneField(AppUser, on_delete=models.CASCADE, related_name="customer", editable=False)
+    user = models.OneToOneField(AppUser, on_delete=models.CASCADE, related_name="customer")
     firstname = models.CharField(max_length=30)
     lastname = models.CharField(max_length=30)
 
@@ -59,24 +62,34 @@ class Customer(models.Model):
         ln_upper = self.lastname.title()
         return f"{ln_upper}, {fn_upper}"
 
+# {
+# "user_type": "customer",
+# "username": "customer1",
+# "email": "customer1@gmail.com",
+# "password": "1111",
+# "address": "No 9, Nunya Business Crescent",
+# "firstname": "Nunya",
+# "lastname": "Business"
+# }
 
 
-    
+
+
+
 # {
 #     "user_type": "vendor",
-#     "email": "xxx123@gmail.com",
-#     "date_joined": "2024-04-05",
+#     "email": "first@gmail.com",
 #     "address": "10, x street, lagos",
-#     "username": "vendorXV",
+#     "username": "First",
 #     "business_name": "business1",
 #     "contact_firstname": "contactfn1",
 #     "contact_lastname": "contactln1",
 #     "bank_name": "GTB",
 #     "beneficiary_name": "beneficiary1",
-#     "account_number": "097xxx12345",
-#     "firstname": "jana",
-#     "lastname": "doe",
-#     "password": "firsttest"
+#     "account_number": "09128722496",
+#     "firstname": "first",
+#     "lastname": "user",
+#     "password": "1111"
 # }
 
     

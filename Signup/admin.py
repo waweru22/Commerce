@@ -44,7 +44,7 @@ class VendorAdmin(admin.ModelAdmin):
     model = Vendor
     # form = PhoneForm
 
-    list_display = ["business_name"]
+    list_display = ["id", "user", "business_name"]
     search_fields = ("business_name",)
     ordering = ("business_name",)
 

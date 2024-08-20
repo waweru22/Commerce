@@ -4,23 +4,24 @@ from django.contrib.auth import authenticate
 
 
 class LoginSerializer(serializers.ModelSerializer):
-    email = serializers.EmailField(label="Email Address")
+    username = serializers.CharField()
 
     class Meta:
         model = AppUser
-        fields = ["email" "password"]
+        fields = ["username", "password"]
         extra_kwargs = {"password": {"write_only": True}}
     
     def validate(self, data):
-        email = data.get("email", None)
+        username = data.get("username", None)
         password = data.get("password", None)
 
-        emu = AppUser.objects.get(email__exact=email)
-        if emu:
-            if emu.check_password(password):
-                print("Wprked up to here")
-                user = authenticate(email=email, password=password)
-                print("Worked so far")
+        # Username-Matched User
+        umu = AppUser.objects.get(username__exact=username)
+        if umu:
+            if umu.check_password(password):
+                # print("Wprked up to here")
+                user = authenticate(username=username, password=password)
+                # print("Worked so far")
                 if user:
                     data["user"] = user
                 else:
