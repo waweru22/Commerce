@@ -1,6 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser
-from Signup.models import Vendor
+
 
 
 
@@ -11,7 +11,7 @@ class Category(models.Model):
         return self.name
 
 class Product(AbstractBaseUser):
-    vendor = models.ForeignKey(Vendor, on_delete=models.CASCADE)
+    # vendor = models.ForeignKey(Vendor, on_delete=models.CASCADE)
     name = models.CharField(max_length=20)
     price = models.IntegerField()
     size = models.TextField(max_length=3)

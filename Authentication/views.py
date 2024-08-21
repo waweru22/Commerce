@@ -15,7 +15,7 @@ class LoginView(APIView):
     def post(self, request, format=None):
 
         if request.user.is_authenticated:
-            return Response({"message": "User Already Signed In"}, status=status.HTTP_200_OK)
+            return Response({"message": f"User {request.user} Already Signed In"}, status=status.HTTP_200_OK)
 
         data = request.data
 
@@ -33,6 +33,7 @@ class LogoutView(APIView):
     permission_classes = ( IsAuthenticated, )
     authentication_classes = ( SessionAuthentication, TokenAuthentication, )
     def get(self, request, format=None):
+        print(request.user)
         request.user.auth_token.delete()
         logout(request)
         return Response({"message": "User Successfully Logged Out"}, status=status.HTTP_200_OK)
