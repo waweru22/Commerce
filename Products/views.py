@@ -1,6 +1,6 @@
 from rest_framework import status
 from .models import Category, Product
-from Signup.models import Vendor
+# from Signup.models import Vendor
 from rest_framework.views import APIView
 from .serializers import ProductSerializer
 from rest_framework.response import Response
@@ -32,7 +32,7 @@ class ProductAPI(APIView):
 
         categories = data.pop('categories', '')
 
-        data['vendor'] = Vendor.objects.get(id__exact=data['vendor'])
+        # data['vendor'] = Vendor.objects.get(id__exact=data['vendor'])
 
         try:
             try:
@@ -62,7 +62,7 @@ class CategoryAPI(APIView):
         categories = ["Clothes", "Jewellery", "Bags", "Shoes"]
         try:
             for i in categories:
-                category =Category.objects.create(name=i)
+                category = Category.objects.create(name=i)
                 category.save()
             
             return Response({"message": "Categories Created Successfuly"}, status=status.HTTP_201_CREATED)

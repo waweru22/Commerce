@@ -1,12 +1,13 @@
-from django.shortcuts import render
+import requests
 
 from rest_framework.views import APIView
-from rest_framework import generics
-from .serializers import AppUserSerializer, VendorSerializer, CustomerSerializer
+from .serializers import AppUserSerializer
 
+from rest_framework import status
+from Signup.models import AppUser
+from rest_framework.authtoken.models import Token
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
-from Signup.models import AppUser
 from .serializers import AppUserSerializer
 
 from rest_framework.permissions import AllowAny
@@ -24,7 +25,7 @@ def getData(request):
 #         serializer.save()
 #     return Response(serializer.data)
 
-class Users(APIView):
+class UserRegistration(APIView):
     permission_classes = ( AllowAny, )
     queryset = AppUser.objects.all()
 
@@ -35,14 +36,34 @@ class Users(APIView):
     
     def post(self, request):
         serializer = AppUserSerializer(data=request.data)
+        password = request.data['password']
+
         if serializer.is_valid(raise_exception = True):
             user = serializer.save()
-            print(serializer.data)
-            print(user)
 
+            data = serializer.data
+
+            token = self.signupauth({'username': data['username'], 'password': password})
+
+            # print(request.user)
+
+            return Response({"message": "User Created and Logged In Successfully", "token": token}, status=status.HTTP_200_OK)
+
+    def signupauth(self, user):
+        # print(user)
+        username = user.get('username', None)
+        password = user.get('password', None)
+
+        res = requests.post('http://127.0.0.1:8000/auth/', data={
+            'username': username,
+            'password': password
+        })
+
+        if res.status_code==200:
+            data = res.json()
+            return data['token']
             
-            return Response(serializer.data)
-        
+
 # TODO: Create endpoints to display vendors and customers
 
         
