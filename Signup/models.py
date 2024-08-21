@@ -43,8 +43,6 @@ class Vendor(models.Model):
     beneficiary_name = models.CharField(max_length=100)
     account_number = models.CharField(max_length=15)
 
-    # user = models.OneToOneField(AppUser, on_delete=models.CASCADE)
-
     def __str__(self):
         return self.business_name
 

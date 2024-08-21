@@ -42,8 +42,7 @@ class Users(APIView):
 
             
             return Response(serializer.data)
-        
-# TODO: Create endpoints to display vendors and customers
+    
 
         
        

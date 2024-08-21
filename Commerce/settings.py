@@ -44,7 +44,8 @@ INSTALLED_APPS = [
     'phonenumbers',
     'Products',
     'Authentication',
-    'corsheaders'
+    'Cart',
+    'corsheaders',
 ]
 
 MIDDLEWARE = [
