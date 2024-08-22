@@ -34,9 +34,11 @@ class LogoutView(APIView):
     authentication_classes = ( SessionAuthentication, TokenAuthentication, )
     def get(self, request, format=None):
         print(request.user)
-        request.user.auth_token.delete()
-        logout(request)
-        return Response({"message": "User Successfully Logged Out"}, status=status.HTTP_200_OK)
+        if request.user.auth_token:
+            request.user.auth_token.delete()
+            logout(request)
+            return Response({"message": "User Successfully Logged Out"}, status=status.HTTP_200_OK)
+        return Response({"message": "User Does Not Have An Auth Token"}, status=status.HTTP_401_UNAUTHORIZED)
 
 
 class TokenTestView(APIView):

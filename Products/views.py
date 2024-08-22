@@ -31,6 +31,7 @@ class ProductAPI(APIView):
         data = request.data
 
         categories = data.pop('categories', '')
+        print(categories)
 
         # data['vendor'] = Vendor.objects.get(id__exact=data['vendor'])
 
@@ -70,18 +71,21 @@ class CategoryAPI(APIView):
         except Exception as e:
             return Response({"message": "Error Encountered On Creating Categories", "Error": e}, status=status.HTTP_400_BAD_REQUEST)
 
-class ImageTest(APIView):
-    authentication_classes = ( SessionAuthentication, TokenAuthentication, )
-    permission_classes = ( IsAuthenticated, )
+# class ImageTest(APIView):
+#     authentication_classes = ( SessionAuthentication, TokenAuthentication, )
+#     permission_classes = ( IsAuthenticated, )
 
-    def get(self, request):
-        import cloudinary
+#     # def get(self, request):
+#     #     # import cloudinary
 
-        cloudinary.config(
-            cloud_name = "dwaomuo1l",
-            secure = True
-        )
+#     #     # cloudinary.config(
+#     #     #     cloud_name = "dwaomuo1l",
+#     #     #     secure = True
+#     #     # )
 
-        image_tag = cloudinary.CloudinaryImage("gcbqmwr1hbvprfohlabz").url
-        print(f"This is the image: {image_tag}")
-        return Response(image_tag, status=status.HTTP_200_OK)
+#     #     # image_tag = cloudinary.CloudinaryImage("gcbqmwr1hbvprfohlabz").url
+#     #     print(f"This is the image: {image_tag}")
+#     #     return Response(image_tag, status=status.HTTP_200_OK)
+
+#     def post(self,request):
+        

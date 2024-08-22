@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser
+from cloudinary.models import CloudinaryField
 
 
 
@@ -16,6 +17,7 @@ class Product(AbstractBaseUser):
     price = models.IntegerField()
     size = models.TextField(max_length=3)
     categories = models.ManyToManyField(Category)
+    image = models.FileField(upload_to='Commerce-images')
 
     REQUIRED_FIELDS = ["vendor"]
 
@@ -24,9 +26,9 @@ class Product(AbstractBaseUser):
 
 
 # {
-# "vendor": "First",
 # "name": "First product",
 # "price": "200",
 # "size": "XL",
-# "categories": ["Clothes"]
+# "categories": ["Clothes"],
+# "image": 
 # }
