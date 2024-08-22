@@ -38,7 +38,7 @@ class UserRegistration(APIView):
         username = request.data['username']
 
         if not AppUser.objects.get(username__exact=username).exists():
-            return Response({"message": "Error Encountered", "Error": "Username Already Exists"}, status=status.HTTP_406_NOT_ACCEPTABLE)
+            return Response({"Message": "Error Encountered", "Error": "Username Already Exists"}, status=status.HTTP_406_NOT_ACCEPTABLE)
         serializer = AppUserSerializer(data=request.data)
         password = request.data['password']
 
@@ -51,7 +51,7 @@ class UserRegistration(APIView):
 
             # print(request.user)
 
-            return Response({"message": "User Created and Logged In Successfully", "token": token}, status=status.HTTP_200_OK)
+            return Response({"Message": "User Created and Logged In Successfully", "Token": token, "Error": None}, status=status.HTTP_200_OK)
 
     def signupauth(self, user):
         # print(user)
