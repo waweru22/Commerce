@@ -37,7 +37,7 @@ class UserRegistration(APIView):
     def post(self, request):
         username = request.data['username']
 
-        if not AppUser.objects.get(username__exact=username).exists():            
+        if not AppUser.objects.filter(username__exact=username).exists():            
             serializer = AppUserSerializer(data=request.data)
             password = request.data['password']
 
