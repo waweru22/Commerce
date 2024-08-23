@@ -11,19 +11,24 @@ class Category(models.Model):
     def __str__(self):
         return self.name
 
-class Product(AbstractBaseUser):
-    # vendor = models.ForeignKey(Vendor, on_delete=models.CASCADE)
+
+class Image(models.Model):
+    image = models.FileField(upload_to='Commerce-images')
+
+
+class Product(models.Model):
     name = models.CharField(max_length=20)
     price = models.IntegerField()
     size = models.TextField(max_length=3)
     categories = models.ManyToManyField(Category)
-    image = models.FileField(upload_to='Commerce-images')
+    feature_image = models.ForeignKey(Image, on_delete=models.SET_NULL, null=True)
+    images = models.JSONField()
 
-    REQUIRED_FIELDS = ["vendor"]
+    REQUIRED_FIELDS = ["name", "price", "size"]
 
     def __str__(self):
         return self.name
-
+    
 
 # {
 # "name": "First product",

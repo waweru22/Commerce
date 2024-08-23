@@ -10,5 +10,5 @@ urlpatterns += [
     path('product/', views.ProductAPI.as_view()),
     path('getprod/', views.getProducts),
     path('category/', views.CategoryAPI.as_view()),
-    # path('images/', views.ImageTest.as_view())
+    path('image/', views.ImageAPI.as_view())
     ]
