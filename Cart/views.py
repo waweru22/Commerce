@@ -12,16 +12,24 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.authentication import TokenAuthentication, SessionAuthentication
 
 @api_view(['GET'])
-def getCartData(request):
+def get_cart_data(request):
     carts = Cart.objects.all()
     serializer = CartSerializer(carts, many=True)
-    return Response(serializer.data)
+    return Response({"Message": "Cart data retrieved successfully.", "data": serializer.data}, status=status.HTTP_200_OK)
 
 @api_view(['GET'])
-def getCartItemData(request):
+def get_cart_item_data(request):
     items = CartItem.objects.all()
     serializer = CartItemSerializer(items, many=True)
-    return Response(serializer.data)
+    return Response({"Message": "Cart item data retrieved successfully.", "data": serializer.data}, status=status.HTTP_200_OK)
+
+@api_view(['DELETE'])
+def delete_cart_item(request, item_id):
+    cart_item = CartItem.objects.get(id=item_id)
+    print(cart_item)
+    cart_item.delete()
+    return Response({"Message": "Target has been neutralized."}, status=status.HTTP_204_NO_CONTENT)
+
 
 class CartItemView(APIView):
     permission_classes = ( IsAuthenticated, )
@@ -49,6 +57,8 @@ class CartItemView(APIView):
         cart_item_serializer = CartItemSerializer(cart_item)
         return Response({"Message": "Cart Item added successfully", "cart": cart_serializer.data, "cart_item": cart_item_serializer.data}, status=status.HTTP_200_OK)
 
-    def delete(self, request):
-        pass
+    # def delete(self, request):
+    #     item_id = CartItem.objects.get(pk=request.data.get('id'))
+    #     item_id.delete()
+    #     return Response({"Message": "Cart item has been neutralized"}, status=status.HTTP_204_NO_CONTENT)
 
