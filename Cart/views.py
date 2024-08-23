@@ -1,33 +1,54 @@
 from django.shortcuts import render
-from .models import Cart
-from .serializers import CartSerializer
+from .models import Cart, CartItem
+from Products.models import Product
+from .serializers import CartSerializer, CartItemSerializer
+from django.contrib.auth.decorators import login_required
+#REST FRAMEWORK
 from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.response import Response
+from rest_framework.decorators import api_view
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.authentication import TokenAuthentication, SessionAuthentication
 
-class CartItems(APIView):
-    # permission_classes = ( IsAuthenticated, )
-    # authentication_classes = ( TokenAuthentication, SessionAuthentication )
+@api_view(['GET'])
+def getCartData(request):
+    carts = Cart.objects.all()
+    serializer = CartSerializer(carts, many=True)
+    return Response(serializer.data)
 
-    def post(self, request, product_id):
-        if request.method == "POST":
-            try:
-                cart_item = Cart.objects.filter(user=request.user, product=product_id)[0]
-            except:
-                return Response("No product found")
-            try:
-                if cart_item:
-                    cart_item.quantity += 1
-                    cart_item.save()
-                else:
-                    cart_item = Cart.objects.create(user=request.user, product=product_id)
-                cartserializer = CartSerializer(cart_item)
-                return Response({"message": "Item added to cart successfully", "cart_item": cartserializer.data}, status=status.HTTP_201_CREATED)
-            except Exception as e:
-                return Response({"message": "Failed to add item", "Error": e}, status=status.HTTP_400_BAD_REQUEST)
+@api_view(['GET'])
+def getCartItemData(request):
+    items = CartItem.objects.all()
+    serializer = CartItemSerializer(items, many=True)
+    return Response(serializer.data)
 
+class CartItemView(APIView):
+    permission_classes = ( IsAuthenticated, )
+    authentication_classes = ( TokenAuthentication, SessionAuthentication )
 
+    def post(self, request, format=None, *args, **kwargs):
+        data = request.data
+        prod_id = data.pop('product_id', '')
+        quantity = data.pop('quantity', '')
+        product = Product.objects.get(id=prod_id)
+
+        if product:
+            cart, created = Cart.objects.get_or_create(owner=request.user, **kwargs)
+        
+            if cart:
+                cart_item = CartItem(product_id=product, quantity=quantity)
+                cart.num_of_items += quantity
+                price_of_cart_item = product.price * quantity
+                cart.total += price_of_cart_item
+                cart_item.save()
+                cart.save()
+                cart_item.cart.add(cart) #Issue here with the cart name
+
+        cart_serializer = CartSerializer(cart)
+        cart_item_serializer = CartItemSerializer(cart_item)
+        return Response({"Message": "Cart Item added successfully", "cart": cart_serializer.data, "cart_item": cart_item_serializer.data}, status=status.HTTP_200_OK)
+
+    def delete(self, request):
         pass
-        # return Response({"message": "This is the Cart"}, status=status.HTTP_200_OK)
+
