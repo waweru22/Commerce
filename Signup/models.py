@@ -3,12 +3,21 @@ from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
 from .managers import AppUserManager
 from phonenumber_field.modelfields import PhoneNumberField
 # import uuid
+from phonenumber_field.widgets import PhoneNumberPrefixWidget
+from django.utils.translation import gettext_lazy as _
+import uuid
 
 # Create your models here.
 
 class AppUser(AbstractBaseUser, PermissionsMixin):
     # user_id = models.AutoField(primary_key=True)
     # id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    user_type = models.CharField(max_length=10)
+    is_active = models.BooleanField(default=True)
+    is_staff = models.BooleanField(default=False)
+    is_superuser = models.BooleanField(default=False)
+    email = models.EmailField(unique=True)
+    date_joined = models.DateTimeField(auto_now_add=True)
     # user_type = models.CharField(max_length=10)
     email = models.EmailField(unique=True)
     address = models.CharField(max_length=150)

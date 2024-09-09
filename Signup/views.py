@@ -32,7 +32,7 @@ class UserRegistration(APIView):
     # def get(self, request, format=None):
     #     users = AppUser.objects.all()
     #     serializer = AppUserSerializer(users, many=True)
-    #     return Response(serializer.data)
+    #     return Response(serializer.data) 
     
     def post(self, request):
         username = request.data['username']

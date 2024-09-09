@@ -31,8 +31,18 @@ class AppUserSerializer(serializers.ModelSerializer):
 
     def validate_username(self, value):
         if AppUser.objects.filter(username=value).exists():
-            raise ValidationError("Username already exists")
+            raise ValidationError("This username already exists")
         return value
+    
+    def validate_email(self, value):
+        if AppUser.objects.filter(email=value).exists():
+            raise ValidationError("This email already exists")
+        return value
+    
+    # def validate_phone_no(self, value):
+    #     if AppUser.objects.filter(phone_no=value).exists():
+    #         raise ValidationError("This phone number already exists")
+    #     return value
 
     def create(self, user_data):
         user = AppUser.objects.create_user(**user_data)
