@@ -1,34 +1,36 @@
 from rest_framework import status
 from .models import Category, Product
-# from Signup.models import Vendor
 from rest_framework.views import APIView
-from .serializers import ProductSerializer, ImageSerializer
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from rest_framework.permissions import IsAuthenticated
+from .serializers import ProductSerializer, ImageSerializer
 from rest_framework.authentication import SessionAuthentication, TokenAuthentication
 
 @api_view(['GET'])
 def getProducts(request):
+    # Fetches every product in the database and returns in a JSON object
     queryset = Product.objects.all()
     serializer = ProductSerializer(queryset, many=True)
     return Response(serializer.data, status=status.HTTP_200_OK)
 
 
-class ProductAPI(APIView):
+class ProductAPI(APIView)
     permission_classes = ( IsAuthenticated, )
     authentication_classes = ( SessionAuthentication, TokenAuthentication, )
 
     def category(self, cat):
+        # Fetches a category object based on the category
         category = Category.objects.get(name__exact=cat)
         if  category:
             return category
         raise KeyError("No Such Category")
     
     def image_store(self, image):
-        # Store Image and Return URL/Entity ID
+        # Store Provided Image and Return URL/Image Object ID
         import requests
 
+        # Make reqest to image storage endpoint
         res = requests.post('http://127.0.0.1:8000/products/image/', data={
             'image': image
         })
@@ -36,7 +38,8 @@ class ProductAPI(APIView):
         if res.status_code == 200:
             response = res.json
             data = response['data']
-
+            
+            # Return image id and url if successfully stored
             return data
         return None
 
@@ -117,21 +120,3 @@ class ImageAPI(APIView):
         return Response({"Message": "Image Storage Unsuccessful"}, status=status.HTTP_400_BAD_REQUEST)
 
 
-# class ImageTest(APIView):
-#     authentication_classes = ( SessionAuthentication, TokenAuthentication, )
-#     permission_classes = ( IsAuthenticated, )
-
-#     # def get(self, request):
-#     #     # import cloudinary
-
-#     #     # cloudinary.config(
-#     #     #     cloud_name = "dwaomuo1l",
-#     #     #     secure = True
-#     #     # )
-
-#     #     # image_tag = cloudinary.CloudinaryImage("gcbqmwr1hbvprfohlabz").url
-#     #     print(f"This is the image: {image_tag}")
-#     #     return Response(image_tag, status=status.HTTP_200_OK)
-
-#     def post(self,request):
-        

@@ -24,25 +24,18 @@ class LoginView(APIView):
         user = serializer.validated_data["user"]
         token, created = Token.objects.get_or_create(user=user)
 
-        print(request.user)
-
-        return Response({"message": "Logged In Successfully", "token": token.key}, status=status.HTTP_200_OK)
+        if token:
+            return Response({"message": "Logged In Successfully", "token": token.key}, status=status.HTTP_200_OK)
+        else:
+            return Response({"Message": "Error Creating Token"}, status=status.HTTP_400_BAD_REQUEST)
 
 
 class LogoutView(APIView):
     permission_classes = ( IsAuthenticated, )
     authentication_classes = ( SessionAuthentication, TokenAuthentication, )
-    def get(self, request, format=None):
-        print(request.user)
+    def get(self, request):
         if request.user.auth_token:
             request.user.auth_token.delete()
             logout(request)
             return Response({"message": "User Successfully Logged Out"}, status=status.HTTP_200_OK)
         return Response({"message": "User Does Not Have An Auth Token"}, status=status.HTTP_401_UNAUTHORIZED)
-
-
-class TokenTestView(APIView):
-    permission_classes = ( IsAuthenticated, )
-    authentication_classes = ( SessionAuthentication, TokenAuthentication, )
-    def get(self, request):
-        return Response({"message": f"Shit worked for {request.user}"})

@@ -3,10 +3,12 @@ from django.contrib.auth.models import AbstractBaseUser
 from cloudinary.models import CloudinaryField
 
 
-
-
 class Category(models.Model):
     name = models.TextField(max_length=20, unique=True)
+
+    class Meta:
+        verbose_name = "Category"
+        verbose_name_plural = "Categories"
 
     def __str__(self):
         return self.name
@@ -28,6 +30,8 @@ class Product(models.Model):
 
     def __str__(self):
         return self.name
+    
+    # Need to create a model for sizes
     
 
 # {

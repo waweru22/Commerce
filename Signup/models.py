@@ -10,11 +10,11 @@ class AppUser(AbstractBaseUser, PermissionsMixin):
     # user_id = models.AutoField(primary_key=True)
     # id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     # user_type = models.CharField(max_length=10)
-    email = models.EmailField()
+    email = models.EmailField(unique=True)
     address = models.CharField(max_length=150)
     username = models.CharField(max_length=30, unique=True)
     # , default=uuid.uuid1
-    phone_no = PhoneNumberField()
+    phone_no = PhoneNumberField(unique=True)
     firstname = models.CharField(max_length=30)
     lastname = models.CharField(max_length=30)
     state = models.CharField(max_length=50)

@@ -16,12 +16,13 @@ class LoginSerializer(serializers.ModelSerializer):
         password = data.get("password", None)
 
         # Username-Matched User
+        # Fetch the User that matches the provided username
         umu = AppUser.objects.get(username__exact=username)
         if umu:
+            # Check if the password from the database entity matches the one provided
             if umu.check_password(password):
-                # print("Wprked up to here")
+                # Authenticate the user if all the parameters check out
                 user = authenticate(username=username, password=password)
-                # print("Worked so far")
                 if user:
                     data["user"] = user
                 else:
